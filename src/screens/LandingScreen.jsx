@@ -2,7 +2,7 @@ import { countWords, MIN_WORDS, LONG_NOTES_WORDS } from '../lib/generate';
 import Button from '../components/Button';
 import Wordmark from '../components/Wordmark';
 
-export default function LandingScreen({ notes, onNotesChange, onGenerate, loading }) {
+export default function LandingScreen({ notes, error, onNotesChange, onGenerate, loading }) {
   const words = countWords(notes);
   const long = words > LONG_NOTES_WORDS;
   const ready = words >= MIN_WORDS;
@@ -52,9 +52,18 @@ export default function LandingScreen({ notes, onNotesChange, onGenerate, loadin
         </div>
       </div>
 
+      {error && (
+        <p
+          role="alert"
+          className="slide-in rounded-card border-wrong/40 bg-wrong/[0.07] mt-4 border border-l-2 border-l-wrong px-4 py-3 text-[15px] leading-relaxed text-text"
+        >
+          {error} <span className="text-muted">Your notes are still here — try again.</span>
+        </p>
+      )}
+
       <div className="mt-6">
         <Button full onClick={onGenerate} disabled={!ready || loading}>
-          {loading ? 'Reading your notes…' : 'Generate flashcards'}
+          {loading ? 'Reading your notes…' : error ? 'Try again' : 'Generate flashcards'}
         </Button>
         <p className="mt-3 text-center text-[13px] text-muted">
           {ready ? 'Cards first, then a quiz.' : `At least ${MIN_WORDS} words needed.`}

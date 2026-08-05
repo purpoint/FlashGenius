@@ -12,6 +12,7 @@ const INITIAL = {
   cardIndex: 0,
   quizIndex: 0,
   answers: {},
+  error: null,
 };
 
 // The spine again, this time as the waiting state — segments light up as if
@@ -48,16 +49,26 @@ export default function App() {
   }, [state.screen]);
 
   const handleGenerate = async () => {
-    patch({ screen: 'loading' });
-    const deck = await generateDeck(state.notes);
-    setState((s) => ({
-      ...s,
-      screen: 'flashcards',
-      deck,
-      cardIndex: 0,
-      quizIndex: 0,
-      answers: {},
-    }));
+    patch({ screen: 'loading', error: null });
+    try {
+      const deck = await generateDeck(state.notes);
+      setState((s) => ({
+        ...s,
+        screen: 'flashcards',
+        deck,
+        cardIndex: 0,
+        quizIndex: 0,
+        answers: {},
+        error: null,
+      }));
+    } catch (err) {
+      // Back to the notes with the reason, rather than stranding the user on
+      // a loading screen that never resolves.
+      patch({
+        screen: 'landing',
+        error: err?.message || 'Something went wrong while building your deck.',
+      });
+    }
   };
 
   // Answered questions are final.
@@ -117,7 +128,8 @@ export default function App() {
       screen = (
         <LandingScreen
           notes={state.notes}
-          onNotesChange={(notes) => patch({ notes })}
+          error={state.error}
+          onNotesChange={(notes) => patch({ notes, error: null })}
           onGenerate={handleGenerate}
           loading={false}
         />
