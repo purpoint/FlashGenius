@@ -71,6 +71,11 @@ export default function App() {
     }
   };
 
+  // Back to the notes, keeping the text so it can be edited and regenerated
+  // rather than re-pasted from scratch.
+  const backToNotes = () =>
+    setState((s) => ({ ...INITIAL, notes: s.notes }));
+
   // Answered questions are final.
   const handleAnswer = (questionId, optionId) => {
     setState((s) =>
@@ -93,7 +98,7 @@ export default function App() {
           index={state.cardIndex}
           onIndexChange={(cardIndex) => patch({ cardIndex })}
           onStartQuiz={() => patch({ screen: 'quiz', quizIndex: 0, answers: {} })}
-          onRestart={() => setState(INITIAL)}
+          onRestart={backToNotes}
         />
       );
       break;
@@ -118,7 +123,7 @@ export default function App() {
           deck={state.deck}
           answers={state.answers}
           onRetake={() => patch({ screen: 'quiz', quizIndex: 0, answers: {} })}
-          onRestart={() => setState(INITIAL)}
+          onRestart={backToNotes}
           onBackToCards={() => patch({ screen: 'flashcards', cardIndex: 0 })}
         />
       );
