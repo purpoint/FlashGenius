@@ -1,5 +1,6 @@
 import QuizQuestion from '../components/QuizQuestion';
 import ProgressTicks from '../components/ProgressTicks';
+import ScreenHeader from '../components/ScreenHeader';
 import Button from '../components/Button';
 
 export default function QuizScreen({
@@ -19,27 +20,20 @@ export default function QuizScreen({
   const atLast = index === total - 1;
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col px-5 py-10 sm:py-14">
-      <header>
-        <button
-          type="button"
-          onClick={onBackToCards}
-          className="text-[13px] text-muted hover:text-text"
-        >
-          ← Back to cards
-        </button>
-      </header>
+    <div className="screen-enter mx-auto flex w-full max-w-xl flex-col px-5 py-8 sm:py-12">
+      <ScreenHeader backLabel="Back to cards" onBack={onBackToCards} />
 
-      <div className="mt-6">
+      <div className="mt-8">
         <div className="mb-3 flex items-baseline justify-between text-[13px] text-muted">
           <span aria-live="polite">
             Question {index + 1} of {total}
           </span>
+          <span>Quiz</span>
         </div>
         <ProgressTicks total={total} current={index} label="Question" />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-9">
         <QuizQuestion
           key={question.id}
           question={question}
@@ -49,7 +43,7 @@ export default function QuizScreen({
       </div>
 
       {locked && (
-        <div className="fade-in mt-8">
+        <div className="fade-in mt-6">
           <Button full onClick={atLast ? onFinish : onNext}>
             {atLast ? 'See results' : 'Next question'}
           </Button>

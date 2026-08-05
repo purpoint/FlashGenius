@@ -14,22 +14,24 @@ const INITIAL = {
   answers: {},
 };
 
+// The spine again, this time as the waiting state — segments light up as if
+// the deck were being dealt.
 function LoadingScreen() {
   return (
-    <div className="mx-auto flex min-h-[60vh] w-full max-w-2xl flex-col items-center justify-center px-5">
-      <div className="flex gap-[3px]" aria-hidden="true">
-        {[0, 1, 2, 3, 4].map((i) => (
+    <div className="screen-enter mx-auto flex min-h-dvh w-full max-w-xl flex-col items-center justify-center px-5">
+      <div className="flex items-end gap-[3px]" aria-hidden="true">
+        {Array.from({ length: 9 }, (_, i) => (
           <span
             key={i}
-            className="h-4 w-1.5 rounded-full bg-accent"
+            className="deal-tick w-[3px] rounded-full bg-accent"
             style={{
-              animation: 'fade-in 900ms ease-in-out infinite alternate',
-              animationDelay: `${i * 120}ms`,
+              height: i % 2 === 0 ? '16px' : '10px',
+              animationDelay: `${i * 90}ms`,
             }}
           />
         ))}
       </div>
-      <p role="status" className="mt-6 text-[15px] text-muted">
+      <p role="status" className="mt-7 text-[15px] text-muted">
         Reading your notes and building the deck…
       </p>
     </div>
