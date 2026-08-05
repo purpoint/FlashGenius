@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Flashcard from '../components/Flashcard';
 import ProgressTicks from '../components/ProgressTicks';
 import ScreenHeader from '../components/ScreenHeader';
+import DeckWarnings from '../components/DeckWarnings';
 import Button from '../components/Button';
 
 export default function FlashcardsScreen({ deck, index, onIndexChange, onStartQuiz, onRestart }) {
@@ -37,6 +38,12 @@ export default function FlashcardsScreen({ deck, index, onIndexChange, onStartQu
       <ScreenHeader backLabel="New notes" onBack={onRestart} />
 
       <h1 className="font-display mt-8 text-[21px] leading-snug sm:text-[25px]">{deck.title}</h1>
+
+      {deck.warnings?.length > 0 && (
+        <div className="mt-5">
+          <DeckWarnings warnings={deck.warnings} />
+        </div>
+      )}
 
       <div className="mt-6">
         <div className="mb-3 flex items-baseline justify-between text-[13px] text-muted">
